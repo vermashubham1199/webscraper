@@ -6,7 +6,7 @@ from typing import List, Callable, Optional, Any, Sequence, Generator
 from selenium.common.exceptions import NoSuchElementException, WebDriverException,InvalidSessionIdException
 import csv
 from selenium.webdriver.chrome.webdriver import WebDriver
-
+from selenium.webdriver.chrome.service import Service
 
 
 COMP_NAME = "/html/body/div[1]/main/div[2]/div[2]/section[1]/div[1]/div[1]/div/a"
@@ -21,7 +21,21 @@ DETAILS = "/html/body/div[@id='root']/main/div[@class='jd-container']/div[@class
 DETAILS2 = "/html/body/div[@id='root']/main/div[@class='jd-container']/div[@class='leftSec']/section[@class='job-desc']/div[@class='other-details']/div[@class='details']/span"
 ALERT_XPATH = "/html/body/div[1]/div[4]/div[2]/div/button"
 
-# print(CITY_XPATH2)
+
+
+
+
+def main():
+    file_name = file_name_checker(input("Name of the file: "))
+    no_of_pages = input("How many pages do you want ot iterate over: ")
+    print(no_of_pages)
+    if no_of_pages:
+        file_creator(jobs_info(get_city_links(NAUKARI_MAIN), int(no_of_pages)), file_name)
+    else:
+        file_creator(jobs_info(get_city_links(NAUKARI_MAIN)), file_name)
+
+
+
 
 def get_city_links(main_link: str) -> list[str]:
     """
@@ -36,8 +50,8 @@ def get_city_links(main_link: str) -> list[str]:
 
 
 
-
-    driver: WebDriver = webdriver.Chrome(ChromeDriverManager().install()) #this function download or update selenium chrome driver and sets it's path 
+    service_driver = Service(executable_path=ChromeDriverManager().install())
+    driver: WebDriver = webdriver.Chrome(service=service_driver) #this function download or update selenium chrome driver and sets it's path 
     driver.maximize_window()
     driver.get(main_link)
     driver.implicitly_wait(15)
@@ -76,7 +90,8 @@ def jobs_info(job_links: list[str], pages: Optional[int]=10)-> Generator[dict, l
 
 
         # Creating webdriver instance
-        driver: WebDriver = webdriver.Chrome(ChromeDriverManager().install())
+        service_driver = Service(executable_path=ChromeDriverManager().install())
+        driver: WebDriver = webdriver.Chrome(service=service_driver)
         driver.maximize_window()
 
 
@@ -189,15 +204,6 @@ def file_name_checker(name:str)-> str:
     else:
         return name+".csv"
 
-
-def main():
-    file_name = file_name_checker(input("Name of the file: "))
-    no_of_pages = input("How many pages do you want ot iterate over: ")
-    print(no_of_pages)
-    if no_of_pages:
-        file_creator(jobs_info(get_city_links(NAUKARI_MAIN), int(no_of_pages)), file_name)
-    else:
-        file_creator(jobs_info(get_city_links(NAUKARI_MAIN)), file_name)
 
 
 

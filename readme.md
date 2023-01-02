@@ -4,6 +4,7 @@
 This project is webscraper that scrapes informaion about various jobs posted in a website called naukari.com
 
 ## Video Demo
+https://youtu.be/4CbgnqJpsNo
 
 
 ## Project Structure
@@ -32,3 +33,6 @@ This function takes a list of links of locations present in naukari.com and iter
 
 #### file_creator
 This function takes a Generator object containing dict and creates a csv file with the data present in the dict
+
+#### file_name_checker
+This function checks weather the of the file's extenction (csv) is correct or not
